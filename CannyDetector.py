@@ -94,8 +94,7 @@ class CannyDetector:
 
     def apply_canny_detector(self, image):
         """Complete pipeline for Canny Edge Detection."""
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
-        blurred = self.apply_gaussian_blur(gray)  # Step 1: Smooth image
+        blurred = self.apply_gaussian_blur(image)  # Step 1: Smooth image
         magnitude, direction = self.sobel_gradients(blurred)  # Step 2: Compute gradients
         suppressed = self.non_maximum_suppression(magnitude, direction)  # Step 3: Non-Maximum Suppression
         thresholded, weak, strong = self.double_threshold(suppressed)  # Step 4: Double Thresholding
@@ -104,12 +103,12 @@ class CannyDetector:
         return final_edges
 
 # Example usage
-if __name__ == "__main__":
-    image = cv2.imread("Images/roberts.jpg")  # Load an image
-    # detector = CannyDetector(low_threshold=75, high_threshold=100)
-    # edges = detector.apply_canny_detector(image)
-    edges= cv2.Canny(image, 75, 150)
+# if __name__ == "__main__":
+#     image = cv2.imread("Images/roberts.jpg")  # Load an image
+#     # detector = CannyDetector(low_threshold=75, high_threshold=100)
+#     # edges = detector.apply_canny_detector(image)
+#     edges= cv2.Canny(image, 75, 150)
 
-    cv2.imshow("Canny Edge Detection", edges)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+#     cv2.imshow("Canny Edge Detection", edges)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
