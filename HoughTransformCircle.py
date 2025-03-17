@@ -108,17 +108,17 @@ class HoughTransformCircle:
         layout.addWidget(canvas)
 
 
-if __name__ =='__main__':
-    # Load an image and apply Hough Transform
-    image = cv2.imread("Images/bicycle.jpeg")  # Change to your image path
-    hough = HoughTransformCircle(image)
+# if __name__ =='__main__':
+#     # Load an image and apply Hough Transform
+#     image = cv2.imread("Images/bicycle.jpeg")  # Change to your image path
+#     hough = HoughTransformCircle(image)
 
-    # Plot the Hough accumulator
-    #hough.plot_accumulator()
+#     # Plot the Hough accumulator
+#     #hough.plot_accumulator()
 
-    # Draw detected lines on the image
-    output_image = hough.draw_lines(image, threshold=150)
-    # Show result
-    cv2.imshow("Detected circles", output_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+#     # Draw detected lines on the image
+#     output_image = hough.draw_lines(image, threshold=150)
+#     # Show result
+#     cv2.imshow("Detected circles", output_image)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()

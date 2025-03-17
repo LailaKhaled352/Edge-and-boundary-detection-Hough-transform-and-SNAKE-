@@ -62,7 +62,7 @@ class CannyDetector:
                     output[i, j] = 0
         return output
 
-    def double_threshold(self, image):
+    def double_threshold(self, image, weak=75, strong=255):
         """Apply double threshold to classify pixels as strong, weak, or suppressed."""
         strong = 255
         weak = 75

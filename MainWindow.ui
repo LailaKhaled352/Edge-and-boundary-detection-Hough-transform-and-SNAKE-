@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1021</width>
-    <height>958</height>
+    <height>985</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,13 +46,1108 @@ QTabBar::tab:selected {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="noise_filter_tab">
        <attribute name="title">
         <string>Edge and Shape Detection</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2"/>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_36">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_left_4">
+            <item>
+             <widget class="QFrame" name="frame_18">
+              <property name="styleSheet">
+               <string notr="true">background-color: #2d282c; /* Background color */
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* 3D shadow effect */</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_20">
+               <property name="leftMargin">
+                <number>9</number>
+               </property>
+               <item row="0" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_64">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_40">
+                   <property name="styleSheet">
+                    <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 15px;
+border: none;</string>
+                   </property>
+                   <property name="text">
+                    <string>Input Image</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_31">
+                   <property name="styleSheet">
+                    <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_40">
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_65" stretch="0">
+                     <item>
+                      <widget class="QWidget" name="inputImage" native="true">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>350</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">border: 1px solid #ffffff;
+background-color: #1f1f1f;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="styleSheet">
+               <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_55">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_87" stretch="0">
+                <item>
+                 <widget class="QFrame" name="frame_19">
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #2d282c; /* Background color */
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* 3D shadow effect */</string>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_21">
+                   <property name="leftMargin">
+                    <number>9</number>
+                   </property>
+                   <item row="0" column="1">
+                    <layout class="QVBoxLayout" name="verticalLayout_67">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_42">
+                       <property name="styleSheet">
+                        <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 15px;
+border: none;</string>
+                       </property>
+                       <property name="text">
+                        <string>Canny Output Image</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="Line" name="line_32">
+                       <property name="styleSheet">
+                        <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_42">
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_69" stretch="0">
+                         <item>
+                          <widget class="QWidget" name="cannyImage" native="true">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>350</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">border: 1px solid #ffffff;
+background-color: #1f1f1f;
+border-radius: 18px;</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_left_6">
+            <item>
+             <widget class="QGroupBox" name="groupBox_10">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QGroupBox {
+background-color: #1f1f1f;
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+}
+QGroupBox::title {
+    color: white;
+    font-weight: bold;
+}
+background-color: #784B84;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+     border: 1.2px solid white;
+border-style: outset;
+border-radius: 8px;</string>
+              </property>
+              <property name="title">
+               <string>Edge Detector Parameters</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="2" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_18">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_19">
+                   <item>
+                    <widget class="QLabel" name="label_6">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>Low Threshold</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="lowThresholdLabel">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="cannyLowThreshold">
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider{
+border: none;
+}
+QSlider::groove {
+background: #f0f0f0; /* Color of the track */
+border: 0px solid #ffffff; /* Border of the track */
+height: 5px; /* Set the height of the track */
+border-radius: 1px; /* Round the corners of the track */
+}
+
+/* Style for the slider handle (thumb) */
+QSlider::handle {
+background: #bd3d7d; /* Color of the handle */
+width: 20px; /* Width of the handle */
+height: 10px; /* Height of the handle */
+margin: -5px 0; /* Negative margin to center the handle vertically */
+border-radius: 4px;
+ border: 1px solid #bd3d7d;
+}
+
+/* Style for the slider handle when pressed */
+QSlider::handle:pressed {
+background: #882c5a; /* Color of the handle when pressed */
+border: 1px solid #882c5a; /* Border of the handle when pressed */
+}</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="0">
+                <spacer name="horizontalSpacer_13">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="3" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_18">
+                 <item>
+                  <spacer name="horizontalSpacer_19">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="cannyButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>200</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #bd3d7d;
+  border-radius: 10px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+font-size:17px;
+      color: white;
+   
+     border: none;
+padding-top:5px;
+padding-bottom:5px;
+font-weight:bold;
+
+width:200px;
+}
+QPushButton:hover {
+    background-color: #9d3268;    /* Slightly lighter blue when hovering */
+}
+
+QPushButton:pressed {
+    background-color: #872b5a;    /* Darker blue when pressed */
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Apply Canny</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_28">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_19">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_20">
+                   <item>
+                    <widget class="QLabel" name="label_7">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>High Threshold</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="highThresholdLabel">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="cannyHighThreshold">
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider{
+border: none;
+}
+QSlider::groove {
+background: #f0f0f0; /* Color of the track */
+border: 0px solid #ffffff; /* Border of the track */
+height: 5px; /* Set the height of the track */
+border-radius: 1px; /* Round the corners of the track */
+}
+
+/* Style for the slider handle (thumb) */
+QSlider::handle {
+background: #bd3d7d; /* Color of the handle */
+width: 20px; /* Width of the handle */
+height: 10px; /* Height of the handle */
+margin: -5px 0; /* Negative margin to center the handle vertically */
+border-radius: 4px;
+ border: 1px solid #bd3d7d;
+}
+
+/* Style for the slider handle when pressed */
+QSlider::handle:pressed {
+background: #882c5a; /* Color of the handle when pressed */
+border: 1px solid #882c5a; /* Border of the handle when pressed */
+}</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="Line" name="line_35">
+              <property name="styleSheet">
+               <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_11">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QGroupBox {
+background-color: #1f1f1f;
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+}
+QGroupBox::title {
+    color: white;
+    font-weight: bold;
+}
+background-color: #784B84;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+     border: 1.2px solid white;
+border-style: outset;
+border-radius: 8px;</string>
+              </property>
+              <property name="title">
+               <string>Hough Transform parameters</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_10">
+               <item row="5" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_21">
+                   <item>
+                    <widget class="QLabel" name="filterLabel3_2">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>Threshold</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="houghLabel">
+                     <property name="styleSheet">
+                      <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 12px;
+border: none;
+
+background-color: #1f1f1f;
+</string>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="houghThreshold">
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider{
+border: none;
+}
+QSlider::groove {
+background: #f0f0f0; /* Color of the track */
+border: 0px solid #ffffff; /* Border of the track */
+height: 5px; /* Set the height of the track */
+border-radius: 1px; /* Round the corners of the track */
+}
+
+/* Style for the slider handle (thumb) */
+QSlider::handle {
+background: #bd3d7d; /* Color of the handle */
+width: 20px; /* Width of the handle */
+height: 10px; /* Height of the handle */
+margin: -5px 0; /* Negative margin to center the handle vertically */
+border-radius: 4px;
+ border: 1px solid #bd3d7d;
+}
+
+/* Style for the slider handle when pressed */
+QSlider::handle:pressed {
+background: #882c5a; /* Color of the handle when pressed */
+border: 1px solid #882c5a; /* Border of the handle when pressed */
+}</string>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="0">
+                <spacer name="horizontalSpacer_43">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="0">
+                <widget class="QComboBox" name="houghCombo">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    font-family: &quot;Arial&quot;;
+    font-weight: 700; /* Semibold */
+    font-size: 10pt; /* Adjust the font size as needed */
+ 	color: rgb(26, 70, 91);
+
+
+	background-color: #bd3d7d;   /* Background color for the combo box */
+  
+    border-radius: 10px;         /* Rounded corners */
+    padding: 4px 10px;           /* Padding around the text */
+    color: white;               
+}
+
+QComboBox::drop-down {
+color: #ffffff;
+}
+QComboBox QAbstractItemView {
+color:#ffffff;
+    background-color: #rgb(224, 224, 224);   /* Background color for the list */
+
+    selection-background-color: #872b5a; /* Selection color when an item is highlighted */
+
+}</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Lines</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Circles</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ellipses</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_27">
+                 <item>
+                  <spacer name="horizontalSpacer_24">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="houghButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>200</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #bd3d7d;
+  border-radius: 10px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+font-size:17px;
+      color: white;
+   
+     border: none;
+padding-top:5px;
+padding-bottom:5px;
+font-weight:bold;
+
+width:200px;
+}
+QPushButton:hover {
+    background-color: #9d3268;    /* Slightly lighter blue when hovering */
+}
+
+QPushButton:pressed {
+    background-color: #872b5a;    /* Darker blue when pressed */
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Apply</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_29">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_25">
+              <property name="styleSheet">
+               <string notr="true">background-color: #262626; /* Background color */
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* 3D shadow effect */</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_37">
+               <property name="leftMargin">
+                <number>9</number>
+               </property>
+               <item row="1" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_86">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_52">
+                   <property name="styleSheet">
+                    <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 15px;
+border:none;
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Hough Transform Output Image</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_40">
+                   <property name="styleSheet">
+                    <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_48">
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_89" stretch="0">
+                     <item>
+                      <widget class="QWidget" name="houghImage" native="true">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>390</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">border: 1px solid #ffffff;
+background-color: #1f1f1f;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_80" stretch="0,0,0">
+            <item>
+             <widget class="QFrame" name="frame_21">
+              <property name="styleSheet">
+               <string notr="true">background-color: #2d282c; /* Background color */
+    border-radius: 15px; /* Curved borders */
+    border: 2px solid #ffffff; /* 3D outline */
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* 3D shadow effect */</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_22">
+               <property name="leftMargin">
+                <number>9</number>
+               </property>
+               <item row="0" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_70">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_43">
+                   <property name="styleSheet">
+                    <string notr="true">color: #ffffff;
+font-weight:Bold;
+font-size: 15px;
+border: none;</string>
+                   </property>
+                   <property name="text">
+                    <string>Hough Accumulator Heatmap</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_34">
+                   <property name="styleSheet">
+                    <string notr="true">/* Line style */
+
+  /* Set the width of the line */
+  width: 20px;
+
+  /* Set the height of the line */
+  height: 5px;
+
+  /* Set the background color of the line */
+  background-color:#a8abaf;
+
+  /* Set the border of the line */
+  border: 10px;
+
+  /* Set the border radius of the line */
+  border-radius:5px;
+
+
+
+
+</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_43">
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_71" stretch="0">
+                     <item>
+                      <widget class="QWidget" name="accumulatorImage" native="true">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>450</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">border: 1px solid #ffffff;
+background-color: #1f1f1f;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_23">
+              <item>
+               <spacer name="horizontalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>200</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="histogram_tab">
        <attribute name="title">
@@ -115,8 +1210,10 @@ border-radius: 5px;</string>
                  <property name="styleSheet">
                   <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 12px;
+font-size: 15px;
 border: none;
+
+background-color: #1f1f1f;
 </string>
                  </property>
                  <property name="text">
@@ -144,16 +1241,12 @@ border: none;
                    <item>
                     <widget class="QLabel" name="iterationsLabel">
                      <property name="styleSheet">
-                      <string notr="true">QLabel {
-color: #ffffff;
+                      <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 11px;
+font-size: 15px;
 border: none;
-text-align: left;
-qproperty-alignment: 'AlignLeft';
 
-}
-
+background-color: #1f1f1f;
 </string>
                      </property>
                      <property name="text">
@@ -227,8 +1320,10 @@ border: 1px solid #882c5a; /* Border of the handle when pressed */
                  <property name="styleSheet">
                   <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 12px;
+font-size: 15px;
 border: none;
+
+background-color: #1f1f1f;
 </string>
                  </property>
                  <property name="text">
@@ -256,16 +1351,12 @@ border: none;
                    <item>
                     <widget class="QLabel" name="alphaLabel">
                      <property name="styleSheet">
-                      <string notr="true">QLabel {
-color: #ffffff;
+                      <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 11px;
+font-size: 15px;
 border: none;
-text-align: left;
-qproperty-alignment: 'AlignLeft';
 
-}
-
+background-color: #1f1f1f;
 </string>
                      </property>
                      <property name="text">
@@ -345,8 +1436,10 @@ border: 1px solid #882c5a; /* Border of the handle when pressed */
                  <property name="styleSheet">
                   <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 12px;
+font-size: 15px;
 border: none;
+
+background-color: #1f1f1f;
 </string>
                  </property>
                  <property name="text">
@@ -374,16 +1467,12 @@ border: none;
                    <item>
                     <widget class="QLabel" name="gammaLabel">
                      <property name="styleSheet">
-                      <string notr="true">QLabel {
-color: #ffffff;
+                      <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 11px;
+font-size: 15px;
 border: none;
-text-align: left;
-qproperty-alignment: 'AlignLeft';
 
-}
-
+background-color: #1f1f1f;
 </string>
                      </property>
                      <property name="text">
@@ -465,8 +1554,10 @@ background-color: #1f1f1f;</string>
                  <property name="styleSheet">
                   <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 12px;
+font-size: 15px;
 border: none;
+
+background-color: #1f1f1f;
 </string>
                  </property>
                  <property name="text">
@@ -494,16 +1585,12 @@ border: none;
                    <item>
                     <widget class="QLabel" name="betaLabel">
                      <property name="styleSheet">
-                      <string notr="true">QLabel {
-color: #ffffff;
+                      <string notr="true">color: #ffffff;
 font-weight:Bold;
-font-size: 11px;
+font-size: 15px;
 border: none;
-text-align: left;
-qproperty-alignment: 'AlignLeft';
 
-}
-
+background-color: #1f1f1f;
 </string>
                      </property>
                      <property name="text">
@@ -616,7 +1703,7 @@ padding-top:5px;
 padding-bottom:5px;
 font-weight:bold;
 
-width:100px;
+width:150px;
 }
 QPushButton:hover {
     background-color: #9d3268;    /* Slightly lighter blue when hovering */

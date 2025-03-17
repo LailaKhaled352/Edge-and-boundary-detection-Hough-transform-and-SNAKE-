@@ -99,17 +99,17 @@ class HoughTransformLine:
         layout.addWidget(canvas)
 
 
-if __name__ =='__main__':
-    # Load an image and apply Hough Transform
-    image = cv2.imread("Images/roberts.jpg")  # Change to your image path
-    hough = HoughTransformLine(image)
+# if __name__ =='__main__':
+#     # Load an image and apply Hough Transform
+#     image = cv2.imread("Images/roberts.jpg")  # Change to your image path
+#     hough = HoughTransformLine(image)
 
-    # Plot the Hough accumulator
-    hough.plot_accumulator()
+#     # Plot the Hough accumulator
+#     hough.plot_accumulator()
 
-    # Draw detected lines on the image
-    output_image = hough.draw_lines(image, threshold=150)
-    # Show result
-    cv2.imshow("Detected Lines", output_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+#     # Draw detected lines on the image
+#     output_image = hough.draw_lines(image, threshold=150)
+#     # Show result
+#     cv2.imshow("Detected Lines", output_image)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
