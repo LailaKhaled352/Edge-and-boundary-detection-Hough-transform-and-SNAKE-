@@ -1,16 +1,13 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-from CannyDetector import CannyDetector
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QVBoxLayout 
 class HoughTransformLine:
-    def __init__(self, image, detected_obj_widget, hough_heatmap_widget, theta_res=1, rho_res=1):
+    def __init__(self, image, detected_obj_widget, hough_heatmap_widget,edges, theta_res=1, rho_res=1):
         """Initialize with an image and resolution settings."""
         self.image = image #image data as numpy array
-        self.canny = CannyDetector( 50, 150)  # Apply Canny edge detection
-        self.edges= self.canny.apply_canny_detector(self.image)
+        self.edges= edges
         self.theta_res = np.deg2rad(theta_res)  # Convert degrees to radians
         self.rho_res = rho_res
         self.accumulator, self.thetas, self.rhos = self._hough_transform()
@@ -49,28 +46,21 @@ class HoughTransformLine:
         return lines
 
     def draw_lines(self, image, threshold=100):
-        """Draw detected lines on the original image."""
         lines = self.detect_lines(threshold)
         output_img = image.copy()
-
-        for rho, theta in lines:
-            a = np.cos(theta)
-            b = np.sin(theta)
-            #x0,y0 is a point on the detected line and it's the closest point to the origin
-            x0 = a * rho
-            y0 = b * rho
-            #Computing Two Endpoints of the Line 
-            x1 = int(x0 + 1000 * (-b))
-            y1 = int(y0 + 1000 * (a))
-            x2 = int(x0 - 1000 * (-b))
-            y2 = int(y0 - 1000 * (a))
-            cv2.line(output_img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-        #send the output image and the widget to the output viewer to show it
-        return output_img 
+        origin = np.array([0, image.shape[1]])
+    
+        for hough_line in lines:
+            rho, theta= hough_line
+            if np.sin(theta) != 0:
+                y0, y1 = (rho - origin * np.cos(theta)) / np.sin(theta)
+            else:
+                y0, y1 = 0, image.shape[0]  # If horizontal, extend from top to bottom                       
+            cv2.line(output_img, (int(origin[0]), int(y0)), (int(origin[1]), int(y1)), (0,0, 255),1)
+        return output_img
 
     def plot_accumulator(self):
-        """Display the Hough accumulator heatmap on the QWidget (self.hough_heatmap_widget)."""
-        
+        """Display the Hough accumulator heatmap on the QWidget (self.hough_heatmap_widget)."""    
         # Clear previous content
         for child in self.hough_heatmap_widget.children():
             child.deleteLater()
@@ -98,18 +88,3 @@ class HoughTransformLine:
         layout = QVBoxLayout(self.hough_heatmap_widget)
         layout.addWidget(canvas)
 
-
-# if __name__ =='__main__':
-#     # Load an image and apply Hough Transform
-#     image = cv2.imread("Images/roberts.jpg")  # Change to your image path
-#     hough = HoughTransformLine(image)
-
-#     # Plot the Hough accumulator
-#     hough.plot_accumulator()
-
-#     # Draw detected lines on the image
-#     output_image = hough.draw_lines(image, threshold=150)
-#     # Show result
-#     cv2.imshow("Detected Lines", output_image)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()

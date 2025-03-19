@@ -57,6 +57,8 @@ class MainWindow(QMainWindow):
         self.applyhough = self.findChild(QPushButton, "houghButton")
         self.applyhough.clicked.connect(self.apply_hough_transform)
 
+        self.edges=None
+
 
 
     def apply_canny(self):
@@ -79,10 +81,10 @@ class MainWindow(QMainWindow):
 
         # Apply custom Canny detection
         detector = CannyDetector(low_threshold, high_threshold)
-        edges = detector.apply_canny_detector(grayscale_image)
+        self.edges = detector.apply_canny_detector(grayscale_image)
 
         # Display processed image in the output widget
-        self.input_viewer.display_output_image(edges, self.canny_image)        
+        self.input_viewer.display_output_image(self.edges, self.canny_image)        
 
     def apply_hough_transform(self):
         """Apply Hough Transform after ensuring edges are detected."""
@@ -93,7 +95,7 @@ class MainWindow(QMainWindow):
         threshold = self.hough_slider.value()
         mode = self.hough_combobox.currentText()
         original_image = self.input_viewer.img_data.copy()
-        canny_detector = CannyDetector(75, 150)
+        #canny_detector = CannyDetector(75, 150)
         # Convert to grayscale if necessary
         if len(self.input_viewer.img_data.shape) == 3:
             grayscale_image = cv2.cvtColor(self.input_viewer.img_data, cv2.COLOR_BGR2GRAY)
@@ -101,18 +103,17 @@ class MainWindow(QMainWindow):
             grayscale_image = self.input_viewer.img_data
 
         # Apply Canny
-        edges = canny_detector.apply_canny_detector(grayscale_image)     
+        #edges = canny_detector.apply_canny_detector(grayscale_image)     
 
         # Get the Hough threshold value from the slider
         hough_threshold = self.hough_slider.value() 
 
         if mode == "Lines":
-            hough = HoughTransformLine(original_image, self.hough_image, self.accumulator_image)
+            hough = HoughTransformLine(original_image, self.hough_image, self.accumulator_image, self.edges)
             detected_hough_image = hough.draw_lines(original_image, threshold=hough_threshold)
 
         elif mode == "Circles":
-            hough = HoughTransformCircle(original_image, self.hough_image, self.accumulator_image)
-            detected_circles = hough.detect_circles(threshold=hough_threshold)
+            hough = HoughTransformCircle(original_image, self.hough_image, self.accumulator_image, self.edges)
             detected_hough_image = hough.draw_circles(original_image, threshold=hough_threshold)
 
         elif mode == "Ellipses":
