@@ -3,9 +3,11 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import QEvent, Qt
 import cv2
 import numpy as np
+from PyQt5.QtCore import pyqtSignal, QObject
+from SignalManager import global_signal_manager  
 
 class ImageViewer(QWidget):
-    def __init__(self, input_view=None, output_view=None, index=0, img_num=None):
+    def __init__(self, input_view=None, output_view=None, index=0, img_num=None,mode=False, widget=0):
         super().__init__()
         self.img_num = img_num
         self.index = index
@@ -15,7 +17,19 @@ class ImageViewer(QWidget):
         self.input_view = input_view
         self.output_view = output_view
 
+        self.mode = mode #to display colored image for second tab
+        self.widget = widget  # Determines if drawing is enabled
+         # Variables for rectangle drawing
+        self.drawing = False
+        self.start_point = None
+        self.end_point = None
+        self.rect_label = None
         self.setup_double_click_event()
+        if self.widget == 2 and self.input_view:
+            print("enter")
+            self.input_view.setMouseTracking(True)
+            self.input_view.installEventFilter(self)
+       
 
        
     
@@ -24,11 +38,54 @@ class ImageViewer(QWidget):
             self.input_view.mouseDoubleClickEvent = self.handle_double_click
     
     def eventFilter(self, obj, event):
-        if obj == self.input_view and event.type() == QEvent.MouseButtonDblClick:
-            self.handle_double_click()
-            return True
+        if obj == self.input_view:
+            if event.type() == QEvent.MouseButtonPress:
+                if event.button() == Qt.RightButton:
+                    self.drawing = True
+                    self.start_point = event.pos()
+                    self.end_point = event.pos()
+                    self.update_rectangle()
+                    return True
+
+            elif event.type() == QEvent.MouseMove and self.drawing:
+                self.end_point = event.pos()
+                self.update_rectangle()
+                return True
+
+            elif event.type() == QEvent.MouseButtonRelease:
+                if event.button() == Qt.RightButton and self.drawing:
+                    self.drawing = False
+                    global_signal_manager.contour_requested.emit()  # Emit signal to start active contour
+                    return True
+
+            elif event.type() == QEvent.MouseButtonDblClick:
+                self.handle_double_click()
+                return True
+
         return super().eventFilter(obj, event)
+
     
+
+
+
+    def update_rectangle(self):
+        """ Draw a rectangle dynamically on the image view """
+        if not self.start_point or not self.end_point:
+            return
+
+        x1, y1 = self.start_point.x(), self.start_point.y()
+        x2, y2 = self.end_point.x(), self.end_point.y()
+        x, y, w, h = min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1)
+        if self.rect_label:
+         self.rect_label.deleteLater()
+         self.rect_label = None  
+
+        self.rect_label = QLabel(self.input_view)
+        self.rect_label.setStyleSheet("border: 2px solid red; background: rgba(255, 0, 0, 50);")
+        self.rect_label.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.rect_label.setGeometry(x, y, w, h)
+        self.rect_label.show()
+
     def handle_double_click(self, event=None):
         file_path, _ = QFileDialog.getOpenFileName(
             None, "Select Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp *.tif *.tiff)"
@@ -39,6 +96,12 @@ class ImageViewer(QWidget):
     def browse_image(self, image_path):
         self._image_path = image_path
         if self.check_extension():
+         if self.mode:
+                print("enter333")
+                self.img_data = cv2.imread(self._image_path, cv2.IMREAD_COLOR)
+                self._is_grey = False
+         else:   
+
             if self.index in [0, 2]:
                 self.img_data = cv2.imread(self._image_path, cv2.IMREAD_GRAYSCALE)
                 self._is_grey = True
@@ -46,16 +109,28 @@ class ImageViewer(QWidget):
                 self.img_data = cv2.imread(self._image_path, cv2.IMREAD_COLOR)
                 self._is_grey = False
 
-            if self.img_data is None:
+         if self.img_data is None:
                 print("Error loading image.")
                 return
 
             
 
-            self._processed_image = self.img_data  # Store the processed image
+        if self.output_view:
+             for child in self.output_view.findChildren(QLabel):
+              child.deleteLater() 
 
 
-            if self.input_view:
+
+
+        if self.rect_label:
+             self.rect_label.deleteLater()
+             self.rect_label = None  # Reset 
+
+
+        self._processed_image = self.img_data  # Store the processed image
+
+
+        if self.input_view:
                 if self.index==0:
                         self.display_image(self.img_data, self.input_view)
                 elif self.index==1:
@@ -83,16 +158,24 @@ class ImageViewer(QWidget):
             print("Invalid image data.")
             return
 
-        if len(img.shape) == 3:  
+
+         # Determine image mode and convert accordingly
+        if self.mode:  # Color mode
+         print ("enter2")
+         if len(img.shape) == 3:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            q_image = QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * 3, QImage.Format_RGB888)
+
+         else:
+            print("Expected a color image but got grayscale.")
+            return
+        else:  # Grayscale mode
+         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        height, width = img.shape
-        bytes_per_line = width
-
+         q_image = QImage(img.data, img.shape[1], img.shape[0], img.shape[1], QImage.Format_Grayscale8)
        
 
        
-        q_image = QImage(img.data, width, height, bytes_per_line, QImage.Format_Grayscale8)
 
         if q_image.isNull():
             print("Failed to create QImage.")
@@ -114,7 +197,10 @@ class ImageViewer(QWidget):
         label.show()
         label.raise_()
 
-        print(f"Grayscale image displayed in widget with size: {target.size()}")
+        print(f"{'Color' if self.mode else 'Grayscale'} image displayed in widget with size: {target.size() , self.input_view }")
+        if self.mode:
+            global_signal_manager.image_loaded.emit()  # Emit the global signal
+
 
 
     def display_RGB_image(self, img, target):
@@ -183,3 +269,47 @@ class ImageViewer(QWidget):
     
     def get_loaded_image(self):
         return self.img_data
+
+
+    def display_contour(self, contour):
+     """
+     Displays the active contour on top of the original image in the output widget.
+    
+     :param contour: NumPy array of contour points (Nx2)
+      """
+     if self.img_data is None:
+        print("No image loaded.")
+        return
+    # Clear previous contour before drawing a new one
+     self._processed_image = self.img_data.copy()
+
+    # Draw the contour (RED line)
+     for i in range(len(contour) - 1):
+        pt1 = tuple(contour[i].astype(int))
+        pt2 = tuple(contour[i + 1].astype(int))
+        cv2.line(self._processed_image, pt1, pt2, (0, 0, 255), 4)  # Red line with thickness 4
+
+    # Connect last and first point to close the contour
+     if len(contour) > 1:
+        cv2.line(self._processed_image, tuple(contour[-1].astype(int)), tuple(contour[0].astype(int)), (0, 0, 255), 4)
+   
+
+     contour_image = cv2.resize(self._processed_image, (self.img_data.shape[1], self.img_data.shape[0]))
+
+    # Display the result in the output widget
+     self.display_output_image(contour_image)
+
+    
+    
+    def get_initial_contour(self):
+     """Get the rectangle coordinates (x1, y1, x2, y2) for use as an initial contour."""
+     if self.start_point and self.end_point:
+        x1, y1 = self.start_point.x(), self.start_point.y()
+        x2, y2 = self.end_point.x(), self.end_point.y()
+        
+        # Ensure the order is always correct
+        x1, x2 = min(x1, x2), max(x1, x2)
+        y1, y2 = min(y1, y2), max(y1, y2)
+
+        return x1, y1, x2, y2  
+     return None  # Return None if no rectangle is selected

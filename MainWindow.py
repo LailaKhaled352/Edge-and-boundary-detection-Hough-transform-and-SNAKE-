@@ -10,6 +10,9 @@ from CannyDetector import CannyDetector
 from HoughTransformLine import HoughTransformLine
 from HoughTransformCircle import HoughTransformCircle
 from HoughTransformEllipse import HoughTransformEllipse
+from ActiveContour import ActiveContour
+from SignalManager import global_signal_manager  
+from ChainCodeWindow import ChainCodeWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -23,11 +26,43 @@ class MainWindow(QMainWindow):
         self.accumulator_image = self.findChild(QWidget, "accumulatorImage")
 
 
+
+        #tab two connections
+        self.input_image_snake = self.findChild(QWidget, "inputImage2")
+        self.output_image_snake = self.findChild(QWidget, "outputImage2")
+        self.alpha_slider = self.findChild(QSlider, "alphaSlider")
+        self.gamma_slider = self.findChild(QSlider, "gammaSlider")
+        self.iter_slider = self.findChild(QSlider, "iterationaSlider")
+
+        self.alpha_label = self.findChild(QLabel, "alphaLabel")
+        self.gamma_label = self.findChild(QLabel, "gammaLabel")
+        self.iter_label = self.findChild(QLabel, "iterationsLabel")
+        self.perimeterLabel=self.findChild(QLabel, "perimeterLabel")
+        self.areaLabel=self.findChild(QLabel, "areaLabel")
+        self.chainCodeButton = self.findChild(QPushButton, "chainCode")
+
+        self.alpha_slider.setRange(0, 9)  # 0.1 to 0.9 (scaled by 10)
+        self.gamma_slider.setRange(0, 9)  # 0 to 0.9 (scaled by 10)
+        self.iter_slider.setRange(1, 100)  # 1000 to 10000 (scaled by 1000)
+
+        self.alpha_slider.setSingleStep(1)
+        self.gamma_slider.setSingleStep(1)
+        self.iter_slider.setSingleStep(1)
+       
+         # Set default values (scaled accordingly)
+        self.alpha_slider.setValue(int(0.1 * 10))  # 0.1 -> 1
+        self.gamma_slider.setValue(int(0.7 * 10))  # 0.7 -> 7
+        self.iter_slider.setValue(int(9000 / 1000))  # 9000 -> 9
+
+        self.update_labels()
         # Create ImageViewers for each widget
         self.input_viewer = ImageViewer(input_view=self.input_image)
         self.canny_viewer = ImageViewer(input_view=self.canny_image)
         self.hough_viewer = ImageViewer(input_view=self.hough_image)
         self.accumulator_viewer = ImageViewer(input_view=self.accumulator_image)
+        self.input_viewer_snake = ImageViewer(input_view=self.input_image_snake, output_view=self.output_image_snake ,index=0,mode=True, widget=2)
+        #Active contour instance
+        self.active_contour = ActiveContour(self.input_image_snake, self.output_image_snake, self.input_viewer_snake,self.perimeterLabel,self.areaLabel)
 
         #canny parameters
         self.highthreshold_slider = self.findChild(QSlider, "cannyHighThreshold")
@@ -59,6 +94,12 @@ class MainWindow(QMainWindow):
 
         self.edges=None
 
+        self.chainCodeButton.clicked.connect(self.open_chainCodeWindow)
+        global_signal_manager.image_loaded.connect(self.apply_active_contour)
+        # Connect sliders to update function
+        self.alpha_slider.valueChanged.connect(self.update_active_contour)
+        self.gamma_slider.valueChanged.connect(self.update_active_contour)
+        self.iter_slider.valueChanged.connect(self.update_active_contour)
 
 
     def apply_canny(self):
@@ -126,6 +167,53 @@ class MainWindow(QMainWindow):
           # Display results
         self.hough_viewer.display_output_image(detected_hough_image, self.hough_image)
         hough.plot_accumulator()    
+
+
+
+
+
+    def apply_active_contour(self):
+        # Load Image with color
+         self.active_contour.load_image()
+
+
+
+
+    def update_active_contour(self):
+        """Update Active Contour parameters and reapply the function."""
+        alpha = self.alpha_slider.value() / 10.0  # Scale back to 0-0.9
+        gamma = self.gamma_slider.value() / 10.0  # Scale back to 0-0.9
+        iterations = self.iter_slider.value() * 1000  # Scale to 1000-10000
+        self.update_labels()
+        # Update active contour parameters
+        self.active_contour.alpha = alpha
+        self.active_contour.gamma = gamma
+        self.active_contour.iterations = iterations
+
+        print(f"Updated Parameters -> Alpha: {alpha}, Gamma: {gamma}, Iterations: {iterations}")
+
+        # Apply active contour with new parameters
+        self.active_contour.apply_active_contour()
+
+
+    def open_chainCodeWindow(self):
+       chaincode= self.active_contour.get_chain_code()
+       if chaincode:
+        self.chainCodeWindow=ChainCodeWindow(chaincode)
+        self.chainCodeWindow.exec_()
+        
+    def update_labels(self):
+        """Update labels based on slider values."""
+        alpha = self.alpha_slider.value() / 10.0  # Scale back to 0.0 - 0.9
+        gamma = self.gamma_slider.value() / 10.0  # Scale back to 0.0 - 0.9
+        iterations = self.iter_slider.value() * 10000  # Scale to 1000 - 10000
+
+        self.alpha_label.setText(f"Alpha: {alpha:.1f}")
+        self.gamma_label.setText(f"Gamma: {gamma:.1f}")
+        self.iter_label.setText(f"Iterations: {iterations}")
+
+
+
 
 
 if __name__ == '__main__':
