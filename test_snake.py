@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import RectangleSelector
-from ActiveCountor import ActiveContour  # Import your class
+from ActiveContour import ActiveContour  # Import your class
 
 # Load the color image
 color_image = cv2.imread("C:/Computer_Vision/task2_canny&activecountour/Edge-and-boundary-detection-Hough-transform-and-SNAKE-/green.jpg")

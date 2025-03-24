@@ -16,7 +16,7 @@ class ImageViewer(QWidget):
         self._is_grey = False
         self.input_view = input_view
         self.output_view = output_view
-
+        self.count=0
         self.mode = mode #to display colored image for second tab
         self.widget = widget  # Determines if drawing is enabled
          # Variables for rectangle drawing
@@ -80,7 +80,7 @@ class ImageViewer(QWidget):
          self.rect_label.deleteLater()
          self.rect_label = None  
 
-        self.rect_label = QLabel(self.input_view)
+        self.rect_label = QLabel(self.input_label)
         self.rect_label.setStyleSheet("border: 2px solid red; background: rgba(255, 0, 0, 50);")
         self.rect_label.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.rect_label.setGeometry(x, y, w, h)
@@ -141,6 +141,7 @@ class ImageViewer(QWidget):
             
     
     def display_output_image(self, processed_img=None, output=None):
+        self.count=1
         if processed_img is None:
             processed_img = self._processed_image  
         if processed_img is None:
@@ -150,6 +151,7 @@ class ImageViewer(QWidget):
             self.display_image(processed_img, output)
         elif self.output_view:
             self.display_image(processed_img, self.output_view)
+            
     
     
     def display_image(self, img, target):
@@ -187,15 +189,21 @@ class ImageViewer(QWidget):
         
         for child in target.findChildren(QLabel):
             child.deleteLater()
-
-        label = QLabel(target)
-        label.setPixmap(pixmap.scaled(target.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-        label.setScaledContents(True)
-        label.setGeometry(0, 0, target.width(), target.height())
+        print(target)
+        self.label = QLabel(target)
+        self.label.setPixmap(pixmap.scaled(target.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+        self.label.setScaledContents(True)
+        self.label.setGeometry(0, 0, target.width(), target.height())
 
         # Ensure the label is visible and on top
-        label.show()
-        label.raise_()
+        self.label.show()
+        self.label.raise_()
+
+        if self.count==0:
+            self.input_label=self.label
+        else:
+            self.count=0
+        
 
         print(f"{'Color' if self.mode else 'Grayscale'} image displayed in widget with size: {target.size() , self.input_view }")
         if self.mode:
