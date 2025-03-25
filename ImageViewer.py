@@ -16,7 +16,7 @@ class ImageViewer(QWidget):
         self._is_grey = False
         self.input_view = input_view
         self.output_view = output_view
-        self.count=0
+
         self.mode = mode #to display colored image for second tab
         self.widget = widget  # Determines if drawing is enabled
          # Variables for rectangle drawing
@@ -24,6 +24,7 @@ class ImageViewer(QWidget):
         self.start_point = None
         self.end_point = None
         self.rect_label = None
+        self.label=None
         self.setup_double_click_event()
         if self.widget == 2 and self.input_view:
             print("enter")
@@ -69,22 +70,28 @@ class ImageViewer(QWidget):
 
 
     def update_rectangle(self):
-        """ Draw a rectangle dynamically on the image view """
-        if not self.start_point or not self.end_point:
-            return
+     """Draw a correctly positioned rectangle on the resized image view if in color mode."""
+     if not self.start_point or not self.end_point:
+        return
 
-        x1, y1 = self.start_point.x(), self.start_point.y()
-        x2, y2 = self.end_point.x(), self.end_point.y()
-        x, y, w, h = min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1)
-        if self.rect_label:
-         self.rect_label.deleteLater()
-         self.rect_label = None  
+     x1, y1 = self.start_point.x(), self.start_point.y()
+     x2, y2 = self.end_point.x(), self.end_point.y()
 
-        self.rect_label = QLabel(self.input_label)
-        self.rect_label.setStyleSheet("border: 2px solid red; background: rgba(255, 0, 0, 50);")
-        self.rect_label.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.rect_label.setGeometry(x, y, w, h)
-        self.rect_label.show()
+     
+
+     x, y, w, h = min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1)
+
+     # Remove old rectangle if it exists
+     if self.rect_label:
+        self.rect_label.deleteLater()
+        self.rect_label = None  
+
+    # Draw new rectangle
+     self.rect_label = QLabel(self.input_view)
+     self.rect_label.setStyleSheet("border: 2px solid red; background: rgba(255, 0, 0, 50);")
+     self.rect_label.setAttribute(Qt.WA_TransparentForMouseEvents)
+     self.rect_label.setGeometry(x, y, w, h)
+     self.rect_label.show()
 
     def handle_double_click(self, event=None):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -141,7 +148,6 @@ class ImageViewer(QWidget):
             
     
     def display_output_image(self, processed_img=None, output=None):
-        self.count=1
         if processed_img is None:
             processed_img = self._processed_image  
         if processed_img is None:
@@ -151,7 +157,6 @@ class ImageViewer(QWidget):
             self.display_image(processed_img, output)
         elif self.output_view:
             self.display_image(processed_img, self.output_view)
-            
     
     
     def display_image(self, img, target):
@@ -160,7 +165,7 @@ class ImageViewer(QWidget):
             print("Invalid image data.")
             return
 
-
+        
          # Determine image mode and convert accordingly
         if self.mode:  # Color mode
          print ("enter2")
@@ -178,18 +183,18 @@ class ImageViewer(QWidget):
        
 
        
-
+        self.scale_x = img.shape[1] / target.width()
+        self.scale_y = img.shape[0] / target.height()
         if q_image.isNull():
             print("Failed to create QImage.")
             return
 
-       
         pixmap = QPixmap.fromImage(q_image)
 
         
         for child in target.findChildren(QLabel):
             child.deleteLater()
-        print(target)
+
         self.label = QLabel(target)
         self.label.setPixmap(pixmap.scaled(target.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
         self.label.setScaledContents(True)
@@ -198,12 +203,6 @@ class ImageViewer(QWidget):
         # Ensure the label is visible and on top
         self.label.show()
         self.label.raise_()
-
-        if self.count==0:
-            self.input_label=self.label
-        else:
-            self.count=0
-        
 
         print(f"{'Color' if self.mode else 'Grayscale'} image displayed in widget with size: {target.size() , self.input_view }")
         if self.mode:
@@ -312,12 +311,19 @@ class ImageViewer(QWidget):
     def get_initial_contour(self):
      """Get the rectangle coordinates (x1, y1, x2, y2) for use as an initial contour."""
      if self.start_point and self.end_point:
-        x1, y1 = self.start_point.x(), self.start_point.y()
-        x2, y2 = self.end_point.x(), self.end_point.y()
+        # Scale coordinates back to original image dimensions
+        x1 = int(self.start_point.x() * self.scale_x)
+        y1 = int(self.start_point.y() * self.scale_y)
+        x2 = int(self.end_point.x() * self.scale_x)
+        y2 = int(self.end_point.y() * self.scale_y)
         
-        # Ensure the order is always correct
+        # Ensure the order is correct
         x1, x2 = min(x1, x2), max(x1, x2)
         y1, y2 = min(y1, y2), max(y1, y2)
 
-        return x1, y1, x2, y2  
-     return None  # Return None if no rectangle is selected
+
+        print(f"Scaling factors - X: {self.scale_x}, Y: {self.scale_y}")
+        print(f"Raw coords: {self.start_point.x()},{self.start_point.y()} to {self.end_point.x()},{self.end_point.y()}")
+        print(f"Scaled coords: {x1},{y1} to {x2},{y2}")
+        return x1, y1, x2, y2
+     return None
