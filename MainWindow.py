@@ -104,6 +104,7 @@ class MainWindow(QMainWindow):
 
     def apply_canny(self):
         """ Apply Canny Edge Detection and display the result. """
+        # Get Canny thresholds from UI sliders  
         low_threshold = self.lowthreshold_slider.value()
         high_threshold = self.highthreshold_slider.value()
 
@@ -111,9 +112,7 @@ class MainWindow(QMainWindow):
         if img is None:
           print("No image loaded for Canny Edge Detection.")
           return
-        # Get Canny thresholds from UI sliders
-        low_threshold = self.lowthreshold_slider.value()
-        high_threshold = self.highthreshold_slider.value()
+
         # Convert to grayscale if necessary
         if len(self.input_viewer.img_data.shape) == 3:  
             grayscale_image = cv2.cvtColor(self.input_viewer.img_data, cv2.COLOR_BGR2GRAY)
@@ -133,7 +132,6 @@ class MainWindow(QMainWindow):
         if self.input_viewer.img_data is None:
             print("No image loaded.")
             return   
-        threshold = self.hough_slider.value()
         mode = self.hough_combobox.currentText()
         original_image = self.input_viewer.img_data.copy()
         #canny_detector = CannyDetector(75, 150)
@@ -141,10 +139,7 @@ class MainWindow(QMainWindow):
         if len(self.input_viewer.img_data.shape) == 3:
             grayscale_image = cv2.cvtColor(self.input_viewer.img_data, cv2.COLOR_BGR2GRAY)
         else:
-            grayscale_image = self.input_viewer.img_data
-
-        # Apply Canny
-        #edges = canny_detector.apply_canny_detector(grayscale_image)     
+            grayscale_image = self.input_viewer.img_data     
 
         # Get the Hough threshold value from the slider
         hough_threshold = self.hough_slider.value() 
@@ -152,23 +147,34 @@ class MainWindow(QMainWindow):
         if mode == "Lines":
             hough = HoughTransformLine(original_image, self.hough_image, self.accumulator_image, self.edges)
             detected_hough_image = hough.draw_lines(original_image, threshold=hough_threshold)
+            hough.plot_accumulator() 
 
         elif mode == "Circles":
             hough = HoughTransformCircle(original_image, self.hough_image, self.accumulator_image, self.edges)
             detected_hough_image = hough.draw_circles(original_image, threshold=hough_threshold)
+            hough.plot_accumulator() 
 
         elif mode == "Ellipses":
-            hough = HoughTransformEllipse(original_image, self.hough_image, self.accumulator_image)
-            detected_hough_image = hough.draw_ellipses(original_image, threshold=hough_threshold)
+            hough = HoughTransformEllipse(grayscale_image, self.hough_image, self.edges)
+            detected_ellipses = hough.detect_ellipses(threshold=hough_threshold)  
+            if len(detected_ellipses) == 3:
+                detected_ellipses = [detected_ellipses[1]]  
+            fitted_ellipses = hough.fit_ellipses(detected_ellipses)         
+            detected_hough_image = hough.draw_ellipses(cv2.cvtColor(original_image, cv2.COLOR_GRAY2BGR), fitted_ellipses)
+
+            # Ensure the image is in RGB
+            detected_hough_image = cv2.cvtColor(detected_hough_image, cv2.COLOR_BGR2RGB)
+
+            if detected_hough_image is not None:
+                self.hough_viewer.display_output_image(detected_hough_image, self.hough_image)
+            else:
+                print("Failed to display detected ellipses.")
 
         else:
             print("Invalid Hough Transform mode selected.")
             return
           # Display results
-        self.hough_viewer.display_output_image(detected_hough_image, self.hough_image)
-        hough.plot_accumulator()    
-
-
+        self.hough_viewer.display_output_image(detected_hough_image, self.hough_image)   
 
 
 

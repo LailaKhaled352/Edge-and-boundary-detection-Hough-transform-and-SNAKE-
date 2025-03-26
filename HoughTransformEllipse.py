@@ -1,96 +1,72 @@
 import cv2
 import numpy as np
-from CannyDetector import CannyDetector
+from skimage.measure import EllipseModel
 
 class HoughTransformEllipse:
-  def __init__(self, image, center_res=3, a_res=5, b_res=5, theta_res=5):
-      """Initialize the Hough Transform for ellipse detection."""
-      self.image = image
-      self.canny = CannyDetector(75, 150)
-      self.edges = self.canny.apply_canny_detector(self.image)
+    def __init__(self, image, detected_obj_widget, edges ,center_res=3, major_axis_res=5):
+        self.image = image
+        self.edges = edges
+        self.center_res = center_res
+        self.major_axis_res = major_axis_res
+        self.accumulator, self.center_x_vals, self.center_y_vals, self.major_axes = self._hough_transform()
+        self.detected_obj_widget = detected_obj_widget
 
-      # Resolution settings
-      self.center_res = center_res
-      self.a_res = a_res
-      self.b_res = b_res
-      self.theta_res = np.deg2rad(theta_res)  # Convert degrees to radians
+    def _hough_transform(self):
+        height, width = self.edges.shape
+        edge_points = np.column_stack(np.where(self.edges))  # (y, x) format
 
-      # Extract image dimensions
-      self.height, self.width = self.edges.shape
+        # Define search space
+        center_x_vals = np.arange(0, width, self.center_res)
+        center_y_vals = np.arange(0, height, self.center_res)
+        major_axes = np.arange(10, 200, self.major_axis_res)
+        
+        accumulator = np.zeros((len(center_x_vals), len(center_y_vals), len(major_axes)), dtype=np.uint16)
+        
+        # Compute edge gradients
+        grad_x = cv2.Sobel(self.edges, cv2.CV_64F, 1, 0)
+        grad_y = cv2.Sobel(self.edges, cv2.CV_64F, 0, 1)
+        gradient_angles = np.arctan2(grad_y, grad_x)
 
-      # Define search space
-      self.center_x_vals = np.arange(0, self.width, self.center_res)
-      self.center_y_vals = np.arange(0, self.height, self.center_res)
-      self.a_vals = np.arange(10, min(self.width, self.height) // 2, self.a_res)
-      self.b_vals = np.arange(10, min(self.width, self.height) // 2, self.b_res)
-      self.theta_vals = np.arange(0, np.pi, self.theta_res)
+   
+        
+        for y, x in edge_points:
+            theta = gradient_angles[y, x]
+            for a_idx, a in enumerate(major_axes):
+                cx = int(x - a * np.cos(theta))
+                cy = int(y - a * np.sin(theta))
+                
+                if 0 <= cx < width and 0 <= cy < height:
+                    idx_x = np.abs(center_x_vals - cx).argmin()
+                    idx_y = np.abs(center_y_vals - cy).argmin()
+                    accumulator[idx_x, idx_y, a_idx] += 1
+        
+        return accumulator, center_x_vals, center_y_vals, major_axes
 
-      # Initialize 5D accumulator
-      self.accumulator = np.zeros(
-        (len(self.center_x_vals), len(self.center_y_vals), len(self.a_vals), len(self.b_vals), len(self.theta_vals)),
-        dtype=np.int32
-      )
+    def detect_ellipses(self, threshold=150, min_distance=15):
+        ellipse_indices = np.argwhere(self.accumulator > threshold)
+        ellipses = []
+        for ix, iy, ia in ellipse_indices:
+            cx, cy, a = self.center_x_vals[ix], self.center_y_vals[iy], self.major_axes[ia]
+            if not any(np.linalg.norm(np.array([cx, cy]) - np.array([ex, ey])) < min_distance for ex, ey, _ in ellipses):
+              ellipses.append((cx, cy, a))
+        return ellipses
 
-  def _hough_transform(self):
-      """Compute Hough Transform for ellipse detection."""
-      edge_points = np.column_stack(np.where(self.edges))  # Get edge coordinates (y, x)
-
-      for y, x in edge_points:
-          for a_idx, a in enumerate(self.a_vals):
-              for b_idx, b in enumerate(self.b_vals):
-                  for theta_idx, theta in enumerate(self.theta_vals):
-                      x_c = x - a * np.cos(theta)
-                      y_c = y - b * np.sin(theta)
-
-                      # Ensure center is within image bounds
-                      if 0 <= x_c < self.width and 0 <= y_c < self.height:
-                          # Find closest center indices
-                          idx_x = np.searchsorted(self.center_x_vals, x_c)
-                          idx_y = np.searchsorted(self.center_y_vals, y_c)
-
-                          # Ensure indices are valid
-                          if idx_x < len(self.center_x_vals) and idx_y < len(self.center_y_vals):
-                              self.accumulator[idx_x, idx_y, a_idx, b_idx, theta_idx] += 1
-
-
-  def detect_ellipses(self, threshold=100):
-      """Extract detected ellipses from the accumulator."""
-      ellipses = []
-      idxs = np.argwhere(self.accumulator > threshold)
-
-      for idx_x, idx_y, a_idx, b_idx, theta_idx in idxs:
-          x_c = self.center_x_vals[idx_x]
-          y_c = self.center_y_vals[idx_y]
-          a = self.a_vals[a_idx]
-          b = self.b_vals[b_idx]
-          theta = self.theta_vals[theta_idx]
-          ellipses.append((x_c, y_c, a, b, theta))
-
-      return ellipses
-  
-  def draw_ellipses(self, image, threshold=100):
-      """Draw detected ellipses on the image."""
-      ellipses = self.detect_ellipses(threshold)
-      output_img = image.copy()
-
-      for x_c, y_c, a, b, theta in ellipses:
-          cv2.ellipse(
-              output_img,
-              (int(x_c), int(y_c)), (int(a), int(b)),
-              np.rad2deg(theta),
-              0, 360, (0, 0, 255), 2
-          )
-
-      return output_img  
-
-# #test
-# if __name__ == '__main__':
-#     image = cv2.imread('Images/Ellipse.png', cv2.IMREAD_GRAYSCALE)
-#     hough = HoughTransformEllipse(image)
-
-#     hough._hough_transform()
-#     result_img = hough.draw_ellipses(image)
-
-#     cv2.imshow("Detected Ellipses", result_img)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
+    def fit_ellipses(self, detected_ellipses):
+        fitted_ellipses = []
+        for cx, cy, a in detected_ellipses:
+            nearby_edges = self.edges[max(0, cy-50):min(self.edges.shape[0], cy+50),
+                                      max(0, cx-50):min(self.edges.shape[1], cx+50)]
+            edge_points = np.column_stack(np.where(nearby_edges))
+            
+            if len(edge_points) >= 5:
+                ellipse = EllipseModel()
+                if ellipse.estimate(edge_points):
+                    fitted_ellipses.append(ellipse.params)  # (xc, yc, a, b, theta)
+        return fitted_ellipses
+    
+    def draw_ellipses(self, image, fitted_ellipses):
+        output_img = image.copy()
+        for xc, yc, a, b, theta in fitted_ellipses:
+            cv2.ellipse(output_img, (int(xc), int(yc)), (int(a), int(b)), np.rad2deg(theta), 0, 360, (0, 0, 255), 2)
+        return output_img
+    
