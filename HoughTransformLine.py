@@ -84,7 +84,11 @@ class HoughTransformLine:
         ax.set_ylabel("Rho (pixels)")
         ax.set_title("Hough Transform Accumulator")
 
-        # Embed the Matplotlib Figure inside the QWidget
-        layout = QVBoxLayout(self.hough_heatmap_widget)
+        if self.hough_heatmap_widget.layout() is None:
+            layout = QVBoxLayout(self.hough_heatmap_widget)
+            self.hough_heatmap_widget.setLayout(layout)
+        else:
+            layout = self.hough_heatmap_widget.layout()
+
         layout.addWidget(canvas)
 

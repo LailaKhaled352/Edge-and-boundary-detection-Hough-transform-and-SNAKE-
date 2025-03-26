@@ -113,6 +113,10 @@ class HoughTransformCircle:
         # Colorbar for reference
         fig.colorbar(img, ax=ax, label="Votes")
 
-        # Embed the plot into the PyQt Widget
-        layout = QVBoxLayout(self.hough_heatmap_widget)
+        if self.hough_heatmap_widget.layout() is None:
+            layout = QVBoxLayout(self.hough_heatmap_widget)
+            self.hough_heatmap_widget.setLayout(layout)
+        else:
+            layout = self.hough_heatmap_widget.layout()
+
         layout.addWidget(canvas)
