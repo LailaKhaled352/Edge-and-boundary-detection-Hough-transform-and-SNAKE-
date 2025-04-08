@@ -16,3 +16,17 @@ This project implements edge and boundary detection techniques using the Canny e
      - Initialize a contour around a given object.
      - Evolve the contour using the Active Contour Model (SNAKE) with a greedy algorithm.
      - Represent the output contour as a chain code.
+     - Calculate perimeter and area of the object.
+
+
+### Dependencies:
+- `scikit-image`
+- `numpy`
+- `cv2`
+- `matplotlib`
+- `scipy`
+
+To install these dependencies, you can use the following command:
+
+```bash
+pip install scikit-image numpy opencv-python matplotlib scipy
